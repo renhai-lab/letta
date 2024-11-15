@@ -1,3 +1,4 @@
+import os
 from typing import List, Optional
 
 from pydantic import BaseModel, Field, model_validator
@@ -96,13 +97,14 @@ class OpenAIProvider(Provider):
     def list_embedding_models(self) -> List[EmbeddingConfig]:
 
         # TODO: actually automatically list models
+        # 从环境变量获取嵌入模型和代理地址
         return [
             EmbeddingConfig(
-                embedding_model="text-embedding-ada-002",
-                embedding_endpoint_type="openai",
-                embedding_endpoint="https://api.openai.com/v1",
-                embedding_dim=1536,
-                embedding_chunk_size=300,
+                embedding_model=os.getenv("OPENAI_EMBEDDING_MODEL", "embeddings-ada-002"),
+                embedding_endpoint_type=os.getenv("EMBEDDING_MODEL_TYPE", "openai"),
+                embedding_endpoint=os.getenv("OPENAI_EMBEDDING_API_BASE", "https://api.openai.com/v1"),
+                embedding_dim=os.getenv("OPENAI_EMBEDDING_DIM", 1536),
+                embedding_chunk_size=os.getenv("OPENAI_EMBEDDING_CHUNK_SIZE", 500),
             )
         ]
 

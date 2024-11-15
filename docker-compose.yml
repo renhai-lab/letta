@@ -1,0 +1,46 @@
+services:
+  letta_db:
+    image: ankane/pgvector:v0.5.1
+    networks:
+      letta_network:
+        aliases:
+          - pgvector_db
+          - letta-db
+    environment:
+      - POSTGRES_USER=${LETTA_PG_USER}
+      - POSTGRES_PASSWORD=${LETTA_PG_PASSWORD}
+      - POSTGRES_DB=${LETTA_PG_DB}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  letta_server:
+    image: letta/letta:latest
+    hostname: letta
+    depends_on:
+      - letta_db
+    ports:
+      - "8083:8083"
+      - "8283:8283"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_HOST=letta_db
+      - DATABASE_USER=${LETTA_PG_USER}
+      - DATABASE_PASSWORD=${LETTA_PG_PASSWORD}
+      - DATABASE_NAME=${LETTA_PG_DB}
+      - LETTA_PG_HOST=pgvector_db
+      - LETTA_PG_PORT=5432
+      - LETTA_DEBUG=True
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE}
+      - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL}
+      - OPENAI_EMBEDDING_API_BASE=${OPENAI_EMBEDDING_API_BASE}
+      
+    networks:
+      - letta_network
+
+networks:
+  letta_network:
+    driver: bridge
+volumes:
+  letta_db_data:
