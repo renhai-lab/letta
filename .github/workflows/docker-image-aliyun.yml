@@ -1,8 +1,9 @@
 name: Aliyun Docker Image CI
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - my-custom
   workflow_dispatch:
 
 jobs:
