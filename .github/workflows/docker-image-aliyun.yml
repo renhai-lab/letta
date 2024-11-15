@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Aliyun Docker Image CI
 
 on:
   release:
@@ -6,9 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:

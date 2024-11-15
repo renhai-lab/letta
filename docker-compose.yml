@@ -14,7 +14,7 @@ services:
       - ./pgdata:/var/lib/postgresql/data
 
   letta_server:
-    image: letta/letta:latest
+    image: registry.cn-hangzhou.aliyuncs.com/renhai/letta:latest
     hostname: letta
     depends_on:
       - letta_db
