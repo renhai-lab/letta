@@ -11,7 +11,8 @@ services:
       - POSTGRES_PASSWORD=${LETTA_PG_PASSWORD}
       - POSTGRES_DB=${LETTA_PG_DB}
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - ./.persist/pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   letta_server:
     image: registry.cn-hangzhou.aliyuncs.com/renhai/letta:latest
@@ -30,7 +31,7 @@ services:
       - DATABASE_NAME=${LETTA_PG_DB}
       - LETTA_PG_HOST=pgvector_db
       - LETTA_PG_PORT=5432
-      - LETTA_DEBUG=True
+      - LETTA_DEBUG=${LETTA_DEBUG:-False}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_API_BASE=${OPENAI_API_BASE}
       - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL}
@@ -44,3 +45,4 @@ networks:
     driver: bridge
 volumes:
   letta_db_data:
+
